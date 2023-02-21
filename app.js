@@ -9,10 +9,26 @@ const numberBtn = document.querySelectorAll(".btn-num");
 const equalBtn = document.querySelector(".btn-equal");
 const buttons = document.querySelectorAll('button[id]')
 
-buttons.forEach(btn => {
-  btn.addEventListener('click', function () {
-      inputNumber(this.id)
-  })})
+let firstNum = "";
+let secondNum = "";
+let currentOperation = null;
+let shouldReset = false;
+
+function resetScreen() {
+  shouldReset = false;
+  currentEl.textContent = "";
+}
+
+function appendNumber(num) {
+  if(currentEl.textContent === "0" || shouldReset) resetScreen()
+  currentEl.textContent += num;
+}
+
+numberBtn.forEach((num)=> {
+  num.addEventListener('click', function() {
+     appendNumber(num.textContent)
+  })
+})
 
   
 
