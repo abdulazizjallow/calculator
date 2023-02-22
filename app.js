@@ -7,7 +7,8 @@ const deleteBtn = document.querySelector(".btn-delete");
 const btnEl = document.querySelectorAll(".btns");
 const numberBtn = document.querySelectorAll(".btn-num");
 const equalBtn = document.querySelector(".btn-equal");
-const buttons = document.querySelectorAll('button[id]')
+const buttons = document.querySelectorAll('button[id]');
+const btnOperator = document.querySelectorAll('.btn-op');
 
 let firstNum = "";
 let secondNum = "";
@@ -24,26 +25,64 @@ function appendNumber(num) {
   currentEl.textContent += num;
 }
 
+function appendOperator(op) {
+  if(currentOperation !== null) evaluate();
+  firstNum = currentEl.textContent;
+  currentOperation = op;
+  previousEl.textContent = `${firstNum} ${currentOperation}`;
+  shouldReset = true;
+  
+}
+
+function evaluate() {
+  if(currentOperation === null || shouldReset) return;
+
+  secondNum = currentEl.textContent;
+  currentEl.textContent = roundResult(operate(currentOperation, firstNum, secondNum));
+ 
+  previousEl.textContent = `${firstNum} ${currentOperation} ${secondNum}`;
+  
+  currentOperation = null;
+}
+
+function deleteNum() {
+  if(currentEl.textContent.length > 1) {
+     currentEl.textContent = currentEl.textContent.toString().slice(0, -1);
+  } else {
+    currentEl.textContent = "0";
+  }
+} 
+
+function clear() {
+  firstNum = "";
+  secondNum = "";
+  currentOperation = null;
+  currentEl.textContent = "0";
+  previousEl.textContent = "";
+}
+
+// eventlisteners
+
 numberBtn.forEach((num)=> {
   num.addEventListener('click', function() {
      appendNumber(num.textContent)
   })
 })
 
-function evaluate() {
-  if(currentOperation === null || shouldReset) return
-  if(currentOperation === '÷' && currentEl.textContent === "0") {
-    alert("you can not divide by 0")
-    return;
-  }
+equalBtn.addEventListener("click", ()=> {
+  evaluate();
+})
 
-  currentEl.textContent = secondNum;
-  currentEl.textcontent = roundResult(
-    operation(currentOperation, firstNum, secondNum)
-  )
-  previousEl.textcontent = `${firstNum} ${currentOperation} ${secondNum}`;
-  currentOperation = null;
-}
+deleteBtn.addEventListener("click", deleteNum)
+clearBtn.addEventListener("click", clear)
+
+btnOperator.forEach((op)=> {
+  op.addEventListener('click', ()=> {
+    appendOperator(op.textContent)
+  })
+})
+
+
 
 function roundResult(number) {
   return Math.round(number * 1000) / 1000;
@@ -65,21 +104,21 @@ const divide = function (num1, num2) {
   return num1 / num2;
 }
 
-const operation = function (operator, num1, num2) {
-  num1 = parseFloat(num1)
-  num2 = parseFloat(num2)
+function operate(operator, num1, num2) {
+  num1 = parseInt(num1)
+  num2 = parseInt(num2)
 
   switch(operator) {
-    case '+': 
-      return add(num1, num2)
+    case '+':
+      return add(num1, num2);
     case '-':
-      return subtract(num1, num2)
+      return subtract(num1, num2);
     case '×':
-      return multiply(num1, num2)
-    case '÷': 
-      if(num2 === 0) return null
-      else return  divide(num1, num2)
-    default: 
-      return null
+      return multiply(num1, num2);
+    case '÷':
+      if(num2 === 0)return null;
+      else return divide(num1, num2);
+    default:
+      null;
   }
 }
