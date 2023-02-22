@@ -30,7 +30,24 @@ numberBtn.forEach((num)=> {
   })
 })
 
-  
+function evaluate() {
+  if(currentOperation === null || shouldReset) return
+  if(currentOperation === '÷' && currentEl.textContent === "0") {
+    alert("you can not divide by 0")
+    return;
+  }
+
+  currentEl.textContent = secondNum;
+  currentEl.textcontent = roundResult(
+    operation(currentOperation, firstNum, secondNum)
+  )
+  previousEl.textcontent = `${firstNum} ${currentOperation} ${secondNum}`;
+  currentOperation = null;
+}
+
+function roundResult(number) {
+  return Math.round(number * 1000) / 1000;
+}
 
 const add = function (num1, num2) {
    return num1 + num2;
