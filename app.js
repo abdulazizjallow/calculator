@@ -9,7 +9,7 @@ const numberBtn = document.querySelectorAll(".btn-num");
 const equalBtn = document.querySelector(".btn-equal");
 const buttons = document.querySelectorAll('button[id]');
 const btnOperator = document.querySelectorAll('.btn-op');
-
+const btnPoint = document.querySelector(".btn-point");
 let firstNum = "";
 let secondNum = "";
 let currentOperation = null;
@@ -23,6 +23,11 @@ function resetScreen() {
 function appendNumber(num) {
   if(currentEl.textContent === "0" || shouldReset) resetScreen()
   currentEl.textContent += num;
+}
+
+function appendPoint() {
+  if(currentEl.textContent.includes("."))return;
+  currentEl.textContent += ".";
 }
 
 function appendOperator(op) {
@@ -75,6 +80,7 @@ equalBtn.addEventListener("click", ()=> {
 
 deleteBtn.addEventListener("click", deleteNum)
 clearBtn.addEventListener("click", clear)
+btnPoint.addEventListener("click", appendPoint);
 
 btnOperator.forEach((op)=> {
   op.addEventListener('click', ()=> {
@@ -105,8 +111,8 @@ const divide = function (num1, num2) {
 }
 
 function operate(operator, num1, num2) {
-  num1 = parseInt(num1)
-  num2 = parseInt(num2)
+  num1 = parseFloat(num1)
+  num2 = parseFloat(num2)
 
   switch(operator) {
     case '+':
